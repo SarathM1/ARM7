@@ -5,7 +5,7 @@ void delay(unsigned int x)
 		for(j=0;j<10000;j++);
 }
 
-void data(char ch)
+void lcd_char(char ch)
 {
 	IO1CLR = 0xffffffff;
 
@@ -47,7 +47,7 @@ void dispInt(int val)
 	}
 }
 
-void str(char ch[20])
+void lcd_str(char ch[20])
 {
 	unsigned int i;
 	for(i=0;ch[i]!='\0';i++)
