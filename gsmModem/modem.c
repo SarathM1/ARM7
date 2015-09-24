@@ -7,15 +7,15 @@ void sendAt(char *cmd)
 	unsigned char i;
 	for(i=0;cmd[i]!='\0';i++)
 	{
-		uart_tx_char(cmd[i]);
+		uart0_tx_char(cmd[i]);
 	}
-	uart_tx_str("\r\n");
-	lcd_str(uart_rx_str());
+	uart0_tx_str("\r\n");
+	lcd_str(uart0_rx_str());
 }
 
 int main()
 {
-	uart_init();
+	uart0_init();
 	lcd_init();
 	sendAt("at\r\n");
 	
