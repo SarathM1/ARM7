@@ -13,7 +13,6 @@ void sendAt(char *cmd)
 	lcd_str(uart0_rx_str());
 }
 
-
 int main()
 {
 	uart0_init();
