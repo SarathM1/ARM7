@@ -236,7 +236,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>0</FileNumber>
+      <FileNumber>2</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -251,9 +251,9 @@
   </Group>
 
   <AlienFiles>
-    <PathWithFilename>C:\Users\SARATH\Documents\ARM7\serial\uart2.h</PathWithFilename>
-    <TopLine>49</TopLine>
-    <CurrentLine>53</CurrentLine>
+    <PathWithFilename>C:\Users\SARATH\Documents\ARM7\header Files\uart0_interrupt.h</PathWithFilename>
+    <TopLine>34</TopLine>
+    <CurrentLine>34</CurrentLine>
     <Constant>0</Constant>
     <WindowPosition>
       <length>0</length>
@@ -1876,10 +1876,10 @@
           <CurrentLine>4</CurrentLine>
         </Doc>
         <Doc>
-          <Name>serial\uart2.h</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>49</TopLine>
-          <CurrentLine>53</CurrentLine>
+          <Name>C:\Users\SARATH\Documents\ARM7\header Files\uart0_interrupt.h</Name>
+          <ColumnNumber>68</ColumnNumber>
+          <TopLine>34</TopLine>
+          <CurrentLine>34</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>

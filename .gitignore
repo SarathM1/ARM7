@@ -60,3 +60,4 @@ hexFile.sct
 *.plg
 *.map
 test.plg
+*.uvopt
