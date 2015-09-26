@@ -391,9 +391,9 @@
               <FilePath>.\Startup.s</FilePath>
             </File>
             <File>
-              <FileName>uart0.c</FileName>
+              <FileName>modem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\serial\uart0.c</FilePath>
+              <FilePath>.\gsmModem\modem.c</FilePath>
             </File>
           </Files>
         </Group>
