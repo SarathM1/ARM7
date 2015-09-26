@@ -1,11 +1,16 @@
 #include<lpc213x.h>
-void uart0_init()
+void uart_init()
 {
-	PINSEL0 = 0x00000005; // Enable Txd and Rxd on P0.0 and P0.1
+	PINSEL0 |= 0x00050005; // Enable Txd and Rxd on P0.0 and P0.1
 	U0LCR = 0X83;
 	U0DLM = 0x00;
 	U0DLL = 0xc3;
 	U0LCR = 0X03;
+
+	U1LCR = 0X83;
+	U1DLM = 0x00;
+	U1DLL = 0xc3;
+	U1LCR = 0X03;
 }
 void uart0_tx_char(unsigned char ch)
 {
@@ -13,7 +18,7 @@ void uart0_tx_char(unsigned char ch)
 	while( !(U0LSR &0x20) );
 }
 
-void uart0_tx_str(unsigned char *ch)
+void uart0_tx_str(char *ch)
 {
 	unsigned int i;
 	for(i=0;ch[i]!='\0';i++)
@@ -21,7 +26,8 @@ void uart0_tx_str(unsigned char *ch)
 		uart0_tx_char(ch[i]);
 	}
 }
-unsigned char uart0_rx_char()
+
+char uart0_rx_char()
 {
 	while( !(U0LSR &0X01) );
 	return U0RBR;
@@ -50,21 +56,14 @@ char* uart0_rx_str()
 
 /////////////// UART 1 /////////////////
 
-void uart1_init()
-{
-	PINSEL0 = 0x00050000; // Enable Txd and Rxd on P0.8 and P0.9
-	U1LCR = 0X83;
-	U1DLM = 0x00;
-	U1DLL = 0xc3;
-	U1LCR = 0X03;
-}
+
 void uart1_tx_char(unsigned char ch)
 {
 	U1THR = ch;
 	while( !(U1LSR &0x20) );
 }
 
-void uart1_tx_str(unsigned char *ch)
+void uart1_tx_str(char *ch)
 {
 	unsigned int i;
 	for(i=0;ch[i]!='\0';i++)
@@ -72,7 +71,7 @@ void uart1_tx_str(unsigned char *ch)
 		uart1_tx_char(ch[i]);
 	}
 }
-unsigned char uart1_rx_char()
+char uart1_rx_char()
 {
 	while( !(U1LSR &0X01) );
 	return U1RBR;
