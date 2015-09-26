@@ -61,3 +61,8 @@ hexFile.sct
 *.map
 test.plg
 *.uvopt
+PROTEUS arm7/LPC2138.pdsprj.SARATH-PC.SARATH.workspace
+PROTEUS arm7/Backup Of LPC2138.pdsbak
+*.pdsprj
+test.uvproj
+*.uvopt
