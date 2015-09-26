@@ -56,13 +56,7 @@ void uart(void)__irq // ISR for UART0
 	char ch;
 	ch = U0RBR; 		// Echo what is recieved
 
-	lcd_char(ch);
-	if(ch == resp[flag])
-	{
-		flag++;
-		//lcd_char(ch);
-	}
-	VICVectAddr = 0;
+	VICVectAddr = 0;	// Compulsary in all ISR's
 }
 */
 
