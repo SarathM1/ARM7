@@ -42,8 +42,8 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\</OutputDirectory>
-          <OutputName>test</OutputName>
+          <OutputDirectory>.\hexFile\</OutputDirectory>
+          <OutputName>hexFile</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -391,9 +391,9 @@
               <FilePath>.\Startup.s</FilePath>
             </File>
             <File>
-              <FileName>TEST.c</FileName>
+              <FileName>uart0.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\timer0\TEST.c</FilePath>
+              <FilePath>.\serial\uart0.c</FilePath>
             </File>
           </Files>
         </Group>

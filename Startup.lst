@@ -662,8 +662,9 @@ ARM Macro Assembler    Page 11
               00000000 
               00000400 
               00000000 
-Command Line: --debug --xref --device=DARMP --apcs=interwork -oStartup.o -IC:\K
-eil\ARM\INC\Philips --predefine="__EVAL SETA 1" --list=Startup.lst Startup.s
+Command Line: --debug --xref --device=DARMP --apcs=interwork -o.\hexFile\Startu
+p.o -IC:\Keil\ARM\INC\Philips --predefine="__EVAL SETA 1" --list=Startup.lst St
+artup.s
 
 
 
