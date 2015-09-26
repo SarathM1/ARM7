@@ -52,3 +52,4 @@ multichannel.o
 test.lnp
 *.bak
 *.dep
+*.hex
