@@ -54,3 +54,6 @@ test.lnp
 *.dep
 *.hex
 *.lnp
+*.plg
+*.tra
+hexFile.sct
