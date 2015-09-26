@@ -5,7 +5,7 @@ void delay(unsigned int x)
 		for(j=0;j<10000;j++);
 }
 
-void data(char ch)
+void lcd_char(char ch)
 {
 	IO1CLR = 0xffffffff;
 
@@ -43,15 +43,15 @@ void dispInt(int val)
 
 	for(i=3;i>=0;i--)
 	{
-		data(a[i]);
+		lcd_char(a[i]);
 	}
 }
 
-void str(char ch[20])
+void lcd_str(char *ch )
 {
 	unsigned int i;
 	for(i=0;ch[i]!='\0';i++)
-		data(ch[i]);
+		lcd_char(ch[i]);
 
 }
 void write_command(char ch)
@@ -103,5 +103,5 @@ void lcd_init()
 	cmd(0x06);	// Auto incre
 	cmd(0x0c);  // Cursor off
 	cmd(0x01);	// LCD Clear
-	
+
 }
