@@ -10,6 +10,9 @@ int x = 0;
 char latitude[10];
 int latValid = 0;
 char ns=0;
+char longitude[11];
+int longValid = 0;
+char ew=0;
 
 void uart(void)__irq // ISR for UART0
 {
@@ -23,12 +26,17 @@ void uart(void)__irq // ISR for UART0
 
 	if(ch=='$')
 	{
+		cmd(0x01);
+		delay(100);
+
 		gprmc = 0;
 		comma = 0;
 		dataValid = -1;
 		latValid=0;
 		x=0;
 		ns=0;
+		longValid=0;
+		ew=0;
 	}
 	
 	if(string[gprmc]==ch)
@@ -49,6 +57,7 @@ void uart(void)__irq // ISR for UART0
 			else if(ch=='V')
 				dataValid=0;
 			break;
+		
 		case 3:
 			if(ch!=',')
 			{
@@ -56,11 +65,29 @@ void uart(void)__irq // ISR for UART0
 				latitude[x+1]='\0';
 			}
 			break;
+		
 		case 4:
 			latValid = 1;
+			x=0;			//Reset x to reuse for longitude
 			if(ch!=',')
 			{
 				ns=ch;
+			}
+			break;
+		
+		case 5:
+			if(ch!=',')
+			{
+				longitude[x++]=ch;
+				longitude[x+1]='\0';
+			}
+			break;
+		
+		case 6:
+			longValid = 1;
+			if(ch!=',')
+			{
+				ew=ch;
 			}
 			break;
 	}
@@ -93,12 +120,23 @@ int main()
 			if(latValid)
 			{
 				cmd(0x84);
-				lcd_str(latitude);  //Skip 1st Character :- ','
+				lcd_str(latitude);  
 			}
 
 			if(ns!=0)
 			{
 				lcd_char(ns);
+			}
+
+			if(longValid)
+			{
+				cmd(0xc0);
+				lcd_str(longitude);
+			}
+
+			if(ew!=0)
+			{
+				lcd_char(ew);
 			}
 		}
 	}
