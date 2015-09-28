@@ -391,9 +391,9 @@
               <FilePath>.\Startup.s</FilePath>
             </File>
             <File>
-              <FileName>modem.c</FileName>
+              <FileName>gps2.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\gsmModem\modem.c</FilePath>
+              <FilePath>.\GPS\gps2.c</FilePath>
             </File>
           </Files>
         </Group>
