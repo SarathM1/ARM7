@@ -61,6 +61,7 @@ void uart(void)__irq // ISR for UART0
 
 int main()
 {
+	
 	uart_init();
 	lcd_init();
 
@@ -70,9 +71,6 @@ int main()
 		{
 			cmd(0x80);
 			lcd_str("GPRMC");
-
-			//cmd(0xC0);
-			//dispInt(comma);
 
 			if(dataValid)
 			{
@@ -88,7 +86,7 @@ int main()
 			if(latValid)
 			{
 				cmd(0xC0);
-				lcd_str(latitude);
+				lcd_str(latitude+1);  //Skip 1st Character :- ','
 			}
 		}
 	}
