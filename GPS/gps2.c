@@ -5,7 +5,7 @@ char string[]="GPRMC";
 
 int gprmc = 0;
 int comma  = 0;
-
+int dataValid = 0;
 
 void uart(void)__irq // ISR for UART0
 {
@@ -19,9 +19,9 @@ void uart(void)__irq // ISR for UART0
 
 	if(ch=='$')
 	{
-		cmd(0x01);
 		gprmc = 0;
-		
+		comma = 0;
+		dataValid = 0;
 	}
 	
 	if(string[gprmc]==ch)
@@ -32,13 +32,17 @@ void uart(void)__irq // ISR for UART0
 	if(ch==',')
 	{
 		comma++;
-		cmd(0xc0);
-		dispInt(comma);
 	}
 
-	
-
-	
+	switch(comma)
+	{
+		case 2:
+			if(ch=='A')
+				dataValid=1;
+			else if(ch=='V')
+				dataValid=0;
+			break;		
+	}
 }
 
 int main()
@@ -52,6 +56,20 @@ int main()
 		{
 			cmd(0x80);
 			lcd_str("GPRMC");
+
+			cmd(0xC0);
+			dispInt(comma);
+
+			if(dataValid)
+			{
+				cmd(0x85);
+				lcd_char('A');
+			}
+			else if(dataValid==0)
+			{
+				cmd(0x85);
+				lcd_char('V');
+			}
 		}
 	}
 }
