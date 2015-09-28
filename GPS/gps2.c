@@ -10,6 +10,7 @@ int x = 0;
 char latitude[10];
 int latValid = 0;
 
+
 void uart(void)__irq // ISR for UART0
 {
 	char ch;
@@ -70,22 +71,22 @@ int main()
 		if(gprmc==5)
 		{
 			cmd(0x80);
-			lcd_str("GPRMC");
+			lcd_str("G ");
 
 			if(dataValid)
 			{
-				cmd(0x85);
-				lcd_char('A');
+				cmd(0x82);
+				lcd_str("A ");
 			}
 			else if(dataValid==0)
 			{
-				cmd(0x85);
-				lcd_char('V');
+				cmd(0x82);
+				lcd_str("V ");
 			}
 
 			if(latValid)
 			{
-				cmd(0xC0);
+				cmd(0x84);
 				lcd_str(latitude+1);  //Skip 1st Character :- ','
 			}
 		}
