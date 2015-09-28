@@ -7,7 +7,7 @@ Working Code
 #include<lpc213x.h>
 
 int flag = 0;
-char resp[] = "ok";
+char resp[] = "OK";
 
 void uart(void)__irq;	  //Fn Declaration
 
