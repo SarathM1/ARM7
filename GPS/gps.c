@@ -19,11 +19,6 @@ void uart(void)__irq // ISR for UART0
 	char ch;
 	ch= U0RBR;
 
-	U0THR = ch;
-	while(!(U0LSR&0x20));
-
-	
-
 	if(ch=='$')
 	{
 		cmd(0x01);
@@ -91,6 +86,7 @@ void uart(void)__irq // ISR for UART0
 			}
 			break;
 	}
+	VICVectAddr = 0;
 }
 
 int main()
@@ -98,7 +94,7 @@ int main()
 	
 	uart_init();
 	lcd_init();
-
+	
 	while(1)
 	{
 		if(gprmc==5)
