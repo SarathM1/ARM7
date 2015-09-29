@@ -236,14 +236,14 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>0</FileNumber>
+      <FileNumber>2</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>8</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>22</TopLine>
-      <CurrentLine>36</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>14</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\GPS\gps2.c</PathWithFileName>
       <FilenameWithoutPath>gps2.c</FilenameWithoutPath>
@@ -251,9 +251,9 @@
   </Group>
 
   <AlienFiles>
-    <PathWithFilename>C:\Users\SARATH\Documents\ARM7\GPS\gps.c</PathWithFilename>
-    <TopLine>20</TopLine>
-    <CurrentLine>31</CurrentLine>
+    <PathWithFilename>C:\Users\SARATH\Documents\ARM7\gsmModem\lcd.h</PathWithFilename>
+    <TopLine>1</TopLine>
+    <CurrentLine>1</CurrentLine>
     <Constant>0</Constant>
     <WindowPosition>
       <length>0</length>
@@ -303,9 +303,9 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>C:\Users\SARATH\Documents\ARM7\gsmModem\lcd.h</PathWithFilename>
-    <TopLine>28</TopLine>
-    <CurrentLine>28</CurrentLine>
+    <PathWithFilename>C:\Users\SARATH\Documents\ARM7\GPS\gps.c</PathWithFilename>
+    <TopLine>20</TopLine>
+    <CurrentLine>31</CurrentLine>
     <Constant>0</Constant>
     <WindowPosition>
       <length>0</length>
@@ -1923,7 +1923,7 @@
       <Documents>
         <Doc>
           <Name>C:\Users\SARATH\Documents\ARM7\GPS\gps.c</Name>
-          <ColumnNumber>2</ColumnNumber>
+          <ColumnNumber>0</ColumnNumber>
           <TopLine>20</TopLine>
           <CurrentLine>31</CurrentLine>
         </Doc>
@@ -1934,16 +1934,10 @@
           <CurrentLine>18</CurrentLine>
         </Doc>
         <Doc>
-          <Name>.\GPS\gps2.c</Name>
-          <ColumnNumber>2</ColumnNumber>
-          <TopLine>22</TopLine>
-          <CurrentLine>36</CurrentLine>
-        </Doc>
-        <Doc>
           <Name>C:\Users\SARATH\Documents\ARM7\gsmModem\lcd.h</Name>
           <ColumnNumber>0</ColumnNumber>
-          <TopLine>28</TopLine>
-          <CurrentLine>28</CurrentLine>
+          <TopLine>1</TopLine>
+          <CurrentLine>1</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>
