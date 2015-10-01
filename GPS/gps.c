@@ -7,10 +7,10 @@ int gprmc = 0;
 int comma  = 0;
 int dataValid = -1;
 int x = 0;
-char latitude[10];
+char latitude[20];
 int latValid = 0;
 char ns=0;
-char longitude[11];
+char longitude[20];
 int longValid = 0;
 char ew=0;
 
@@ -21,14 +21,13 @@ void uart(void)__irq // ISR for UART0
 
 	if(ch=='$')
 	{
-		cmd(0x01);
-		delay(100);
-
 		gprmc = 0;
 		comma = 0;
 		dataValid = -1;
 		latValid=0;
 		x=0;
+		latitude[0]='\0';
+		longitude[0]='\0';
 		ns=0;
 		longValid=0;
 		ew=0;
@@ -85,6 +84,7 @@ void uart(void)__irq // ISR for UART0
 				ew=ch;
 			}
 			break;
+
 	}
 	VICVectAddr = 0;
 }
