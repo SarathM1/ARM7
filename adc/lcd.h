@@ -1,18 +1,19 @@
+
 void delay(unsigned int x)
 {
 	unsigned int i,j;
 	for(i=0;i<x;i++)
-		for(j=0;j<10000;j++);
+		for(j=0;j<7777;j++);
 }
 
-void data(char ch)
+void lcd_char(char ch)
 {
 	IO1CLR = 0xffffffff;
 
 	IO1SET = 0x000A0000;
 	IO1CLR = 0x00040000;
 	IO1SET = IO1SET | ( (ch & 0xf0) << 16 );
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
@@ -20,38 +21,17 @@ void data(char ch)
 	IO1SET = 0x000A0000;
 	IO1CLR = 0x00040000;
 	IO1SET = IO1SET | ( (ch & 0x0F) << 20 );
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
 	
 }
-
-void dispInt(int val)
-{
-	char ch;
-	unsigned char a[5];
-	int i = 0;
-	for(i=0;i<=3;i++)
-	{
-		ch =  (val%10) ;
-		a[i] = ch+48;
-		
-		val = val / 10;
-	}
-	//a[i]= '\0';
-
-	for(i=3;i>=0;i--)
-	{
-		data(a[i]);
-	}
-}
-
-void str(char ch[20])
+void lcd_str(char ch[20])
 {
 	unsigned int i;
 	for(i=0;ch[i]!='\0';i++)
-		data(ch[i]);
+		lcd_char(ch[i]);
 
 }
 void write_command(char ch)
@@ -61,7 +41,7 @@ void write_command(char ch)
 	IO1CLR = 0x00060000;
 	IO1SET = 0X00080000;
 	IO1SET = IO1SET | ((ch & 0xf0)<<16);
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	
@@ -73,7 +53,7 @@ void cmd(char ch)
 	IO1CLR = 0x00060000;
 	IO1SET = 0X00080000;
 	IO1SET = IO1SET | ((ch & 0xf0)<<16);
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
@@ -81,7 +61,7 @@ void cmd(char ch)
 	IO1CLR = 0x00060000;
 	IO1SET = 0X00080000;
 	IO1SET = IO1SET | ((ch & 0x0f)<<20);
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
@@ -91,11 +71,11 @@ void lcd_init()
 {
 	  IODIR1 = 0x00FE0000;
 	  write_command(0x30); 
-	  delay(1);
+	  delay(10);
 	  write_command(0x30);
-	  delay(1);
+	  delay(10);
 	  write_command(0x30);
-	  delay(1);
+	  delay(10);
 	  write_command(0x20);
 
 
@@ -105,3 +85,5 @@ void lcd_init()
 	cmd(0x01);	// LCD Clear
 	
 }
+
+
