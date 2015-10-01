@@ -6,7 +6,7 @@ void delay(unsigned int x)
 {
 	unsigned int i,j;
 	for(i=0;i<x;i++)
-		for(j=0;j<10000;j++);
+		for(j=0;j<7777;j++);
 }
 
 void data(char ch)
@@ -16,7 +16,7 @@ void data(char ch)
 	IO1SET = 0x000A0000;
 	IO1CLR = 0x00040000;
 	IO1SET = IO1SET | ( (ch & 0xf0) << 16 );
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
@@ -24,7 +24,7 @@ void data(char ch)
 	IO1SET = 0x000A0000;
 	IO1CLR = 0x00040000;
 	IO1SET = IO1SET | ( (ch & 0x0F) << 20 );
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
@@ -44,7 +44,7 @@ void write_command(char ch)
 	IO1CLR = 0x00060000;
 	IO1SET = 0X00080000;
 	IO1SET = IO1SET | ((ch & 0xf0)<<16);
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	
@@ -56,7 +56,7 @@ void cmd(char ch)
 	IO1CLR = 0x00060000;
 	IO1SET = 0X00080000;
 	IO1SET = IO1SET | ((ch & 0xf0)<<16);
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
@@ -64,7 +64,7 @@ void cmd(char ch)
 	IO1CLR = 0x00060000;
 	IO1SET = 0X00080000;
 	IO1SET = IO1SET | ((ch & 0x0f)<<20);
-	delay(1);
+	delay(10);
 	IO1CLR = 0x00080000;
 
 	IO1CLR = 0xffffffff;
@@ -74,11 +74,11 @@ void lcd_init()
 {
 	  IODIR1 = 0x00FE0000;
 	  write_command(0x30); 
-	  delay(1);
+	  delay(10);
 	  write_command(0x30);
-	  delay(1);
+	  delay(10);
 	  write_command(0x30);
-	  delay(1);
+	  delay(10);
 	  write_command(0x20);
 
 
@@ -91,6 +91,7 @@ void lcd_init()
 
 int main()
 {
+	//delay(1000);
 	//IODIR1 = 0x00FE0000;
 	lcd_init();
 	
