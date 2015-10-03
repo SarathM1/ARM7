@@ -24,7 +24,6 @@ void pwm_init()
 
 	PWMMR1	= 500;	// T-ON = 50%
 	PWMLER	= (1<<1);		// Load values to PWMMR1 
-	//delay(100);
 	
 }
 
