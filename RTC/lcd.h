@@ -67,6 +67,24 @@ void cmd(char ch)
 	IO1CLR = 0xffffffff;
 
 }
+
+void lcd_int(long int num)
+{
+	char str[10];
+	int i,r,j;
+
+	for(i=0;num>0;i++,num/=10)
+	{
+		r = num%10;
+		str[i] = r + 48;
+	}
+	str[i]='\0';
+
+	for(j=i-1;j>=0;j--)
+		lcd_char(str[j]);
+
+}
+
 void lcd_init()
 {
 	  IODIR1 = 0x00FE0000;

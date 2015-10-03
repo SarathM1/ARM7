@@ -31,15 +31,23 @@ void rtc(void)__irq // ISR for UART0
 {
 	static int i=0;
 	i++;
-	//cmd(0x80);
-	lcd_char('a');
+	IOSET1 = IOPIN1 ^ 0x00010000;
+	
+	cmd(0x80);
+	lcd_int(IOPIN1);
+	cmd(0xc0);
+	lcd_int(i) ;
+
 	ILR = 0X01;
 	VICVectAddr = 0;	// Compulsary in all ISR's
+	
 }
 
 int main()
 {
+	IODIR1 = 0x00010000;
 	lcd_init();
+	
 	rtc_init();
 	reset_time();
 	while(1);
