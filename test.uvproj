@@ -393,7 +393,7 @@
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\RTC\main.c</FilePath>
+              <FilePath>.\PWM\main.c</FilePath>
             </File>
           </Files>
         </Group>
