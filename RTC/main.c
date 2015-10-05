@@ -32,23 +32,16 @@ void rtc(void)__irq // ISR for RTC
 {
 	static int i=0;
 	i++;
-	//IOSET1 = IOPIN1 ^ 0x00010000;
-
-
-	if(i%2==0)
-		IOSET1 = 0X00010000;
-	else
-		IOCLR1 = 0X00010000;
 	
 	cmd(0x01);
 
 	cmd(0xc0);
 	lcd_int(HOUR) ;
-	//lcd_char(':');
+	lcd_char(':');
 	
 	cmd(0xc3);
 	lcd_int(MIN);
-	//lcd_char(':');
+	lcd_char(':');
 	
 	cmd(0xc6);
 	lcd_int(SEC);
@@ -64,16 +57,7 @@ int main()
 	
 
 	lcd_init();
-	IODIR1 |= 0x00010000;
 	
-
-	/*
-	while(1){
-	IO1SET = 0x00010000;
-	delay(500);
-	IO1CLR = 0x00010000;
-	delay(500);}
-	*/
 
 	rtc_init();
 	reset_time();

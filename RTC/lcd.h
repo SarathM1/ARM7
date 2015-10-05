@@ -73,7 +73,7 @@ void lcd_int(long int num)
 	char str[10];
 	int i,r,j;
 
-	for(i=0;num>0;i++,num/=10)
+	for(i=0;i<2;i++,num/=10)
 	{
 		r = num%10;
 		str[i] = r + 48;
