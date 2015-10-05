@@ -87,7 +87,7 @@ void lcd_int(long int num)
 
 void lcd_init()
 {
-	  IODIR1 = 0x00FE0000;
+	  IODIR1 |= 0x00FE0000;		 //   if bug, check IODIR1 = 0x00FE0000;  
 	  write_command(0x30); 
 	  delay(10);
 	  write_command(0x30);
