@@ -20,9 +20,9 @@ void rtc_init()
 
 void reset_time()
 {
-	HOUR 	= 0;
-	MIN		= 0;
-	SEC		= 0;
+	HOUR 	= 23;
+	MIN		= 59;
+	SEC		= 58;
 	
 }
 
