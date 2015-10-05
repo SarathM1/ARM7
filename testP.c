@@ -8,7 +8,7 @@ void delay(unsigned int x)
 }
 int main()
 {
-	long int x = 0x00010000;
+	//long int x = 0x00010000;
 	unsigned int i = 0;
 	IODIR1 = 0x00FF0000;
 	  	IO1SET = 0x00010000;
