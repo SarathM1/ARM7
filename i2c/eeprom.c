@@ -40,9 +40,9 @@ void i2c0_addr2(char slave_addr)
 
 void i2c0_write(char data)
 {
+	I2C0DAT 	= data;   // Data valid before other steps		#
 	I2C0CONSET = (1<<2);
 	I2C0CONCLR = (1<<3);	// SIC = 1
-	I2C0DAT 	= data;
 	while(I2C0STAT != 0X28);
 }
 
