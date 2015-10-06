@@ -6,6 +6,7 @@ void delay(unsigned int x)
 		for(j=0;j<7777;j++);
 }
 
+
 void lcd_char(char ch)
 {
 	IO1CLR = 0xffffffff;
@@ -85,6 +86,15 @@ void lcd_int(long int num)
 
 }
 
+void debug(char *str)
+{
+	delay(100);
+	cmd(0x01);
+	lcd_str(str);
+	delay(100);
+	cmd(0x01);
+}
+
 void lcd_init()
 {
 	  IODIR1 |= 0x00FE0000;		 //   if bug, check IODIR1 = 0x00FE0000;  
@@ -102,10 +112,7 @@ void lcd_init()
 	cmd(0x0c);  // Cursor off
 	cmd(0x01);	// LCD Clear
 
-	lcd_str("OK");
-	delay(500);
-	cmd(0x01);
-	
+	debug("LCD On!!");
 }
 
 
