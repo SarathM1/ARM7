@@ -22,28 +22,12 @@ void i2c0_stop()
 	I2C0CONCLR = (1<<3);			//Clear SIC
 }
 
-void i2c0_addr(char slave_addr)
-{
-	I2C0CONSET = (1<<2); // AA =1
-	I2C0CONCLR = (1<<3)|(1<<5);	// SIC = 1
-	I2C0DAT = slave_addr;
-	while(I2C0STAT != 0X18);	
-}
-
-void i2c0_addr2(char slave_addr)
-{
-	I2C0CONSET = (1<<2); // AA =1
-	I2C0CONCLR = (1<<3);	// SIC = 1
-	I2C0DAT = slave_addr;
-	while(I2C0STAT != 0X40);
-}
-
-void i2c0_write(char data)
+void i2c0_write(char data,,unsigned char status)
 {
 	I2C0DAT 	= data;   // Data valid before other steps		#
 	I2C0CONSET = (1<<2);
 	I2C0CONCLR = (1<<3) | (1<<5);	// SIC = 1, STAC = 1		 #
-	while(I2C0STAT != 0X28);
+	while(I2C0STAT != status);
 }
 
 char i2c0_read()
@@ -53,16 +37,6 @@ char i2c0_read()
 	while(I2C0STAT != 0x50);
 	return I2C0DAT;
 }
-void i2c0_location(char loc_addr)
-{
-	I2C0CONSET = (1<<2);
-	I2C0CONCLR = (1<<3)|(1<<5);	// SIC = 1 , STAC = 1
-	I2C0DAT 	= loc_addr;
-	while(I2C0STAT != 0X28);
-
-}
-
-
 
 void i2c0_write_init(char slave_id, char locatn)
 {
