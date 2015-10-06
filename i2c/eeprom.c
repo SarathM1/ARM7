@@ -49,14 +49,14 @@ void i2c0_write(char data)
 char i2c0_read()
 {
 	I2C0CONSET = (1<<2);
-	I2C0CONCLR = (1<<3);	// SIC = 1
+	I2C0CONCLR = (1<<3) | (1<<5);	// SIC = 1, STAC = 1
 	while(I2C0STAT != 0x50);
 	return I2C0DAT;
 }
 void i2c0_location(char loc_addr)
 {
 	I2C0CONSET = (1<<2);
-	I2C0CONCLR = (1<<3)|(1<<5);	// SIC = 1 , Clear ST0 ??
+	I2C0CONCLR = (1<<3)|(1<<5);	// SIC = 1 , STAC = 1
 	I2C0DAT 	= loc_addr;
 	while(I2C0STAT != 0X28);
 
