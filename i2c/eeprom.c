@@ -38,12 +38,7 @@ char i2c0_read()
 	return I2C0DAT;
 }
 
-void i2c0_write_init(char slave_id, char locatn)
-{
-	i2c0_start();
-	i2c0_addr(slave_id & 0XFE);	// Claering 8th bit only, select write operation
-	i2c0_location(locatn);		// Location in EEPROM to use
-}
+
 
 void i2c0_dummy_write(char slave_id, char location)
 {
@@ -69,34 +64,44 @@ void i2c0_read_init(char slave_id, char location)
 	i2c0_addr2(slave_id | 0x01);	
 }
 
+void eeprom_write()
+{
+	i2c0_init();
+	i2c0_start();
+	i2c0_write(0xA0,0x18);	// Slave id = 0xA0, Wait while I2C0STAT != 0X18
+	i2c0_write(0x00,0x28);		// Read from location 0x00, Wait while I2C0STAT != 0X28
+	i2c0_write('A',0x28);	// Data = 'A' , wait  while I2C0STAT != 0X28
+	i2c0_stop();
+}
+
+char eeprom_read()
+{
+	char data;
+
+	/******DUMMY WRITE Start********/
+	i2c0_init();
+	i2c0_start();
+	i2c0_write(0xA0,0x18);	// Slave id = 0xA0, R/W = 0, Wait while I2C0STAT != 0X18
+	i2c0_write(0x00,0x28);		// Read from location 0x00, Wait while I2C0STAT != 0X28
+	i2c0_stop();
+	/******DUMMY WRITE End********/
+
+	/******READ DATA Start********/
+	i2c0_Start();	
+	i2c0_Write(0xA1,0x40);	// Slave id = 0xA0, R/W = 1, Wait while I2C0STAT != 0X40
+	data = i2c0_Read();
+	i2c0_stop();
+	/******READ DATA End********/
+
+	return (data);
+
+}
+
 int main()
 {
-	char ch;
 	lcd_init();
-	i2c0_init();
-	i2c0_write_init(0xA0,0x00);
 
-	
-	for(ch='A';ch!='D';ch++)
-	{
-		i2c0_write(ch);
-	}
-	i2c0_stop();
-
-	
-	
-
-	i2c0_read_init(0xA0,0x00);
-	
-	
-	
-
-	do
-	{
-		ch = i2c0_read();
-		lcd_char(ch);
-
-	}while(ch!='D');
+	eeprom_write();
 
 	while(1);
 }
