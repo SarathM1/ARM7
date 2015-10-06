@@ -42,7 +42,7 @@ void i2c0_write(char data)
 {
 	I2C0DAT 	= data;   // Data valid before other steps		#
 	I2C0CONSET = (1<<2);
-	I2C0CONCLR = (1<<3);	// SIC = 1
+	I2C0CONCLR = (1<<3) | (1<<5);	// SIC = 1, STAC = 1		 #
 	while(I2C0STAT != 0X28);
 }
 
