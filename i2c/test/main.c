@@ -19,14 +19,6 @@ void EEPROM24C_Write(unsigned char data,unsigned char address);
 unsigned char EEPROM24C_Read(unsigned char address);
 /*********************************************/
 
-void debug()
-{
-	Delay_ms(100);
-	Lcd_Cmd(LCD_CLEAR);
-	Lcd_Write_Text("DONE!!");
-	Delay_ms(100);
-	Lcd_Cmd(LCD_CLEAR);
-}
 
 int main()
 {
@@ -40,7 +32,7 @@ int main()
 	Lcd_Cmd(LCD_FIRST_ROW);
 	Lcd_Write_Text("Writing... A");
 	EEPROM24C_Write('A',0x00);
-	Lcd_Cmd(LCD_SECOND_ROW);
+	//Lcd_Cmd(LCD_SECOND_ROW);
 	read_eeprom = EEPROM24C_Read(0x00);
 	Lcd_Write_Text("Reading... ");
 	Lcd_Write(read_eeprom);	

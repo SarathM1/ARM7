@@ -80,3 +80,11 @@ void Write_Data(unsigned int value)
 	Enable_Pulse();
 }
 /*********************************************/
+void debug()
+{
+	Delay_ms(100);
+	Lcd_Cmd(LCD_CLEAR);
+	Lcd_Write_Text("DONE!!");
+	Delay_ms(100);
+	Lcd_Cmd(LCD_CLEAR);
+}
