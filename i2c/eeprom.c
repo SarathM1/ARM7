@@ -1,4 +1,4 @@
-#include<lpc21xx.h>
+#include<lpc213x.h>
 #include "lcd.h"
 
 void i2c0_init()
@@ -22,7 +22,7 @@ void i2c0_stop()
 	I2C0CONCLR = (1<<3);			//Clear SIC
 }
 
-void i2c0_write(char data,,unsigned char status)
+void i2c0_write(char data,unsigned char status)
 {
 	I2C0DAT 	= data;   // Data valid before other steps		#
 	I2C0CONSET = (1<<2);
@@ -40,29 +40,7 @@ char i2c0_read()
 
 
 
-void i2c0_dummy_write(char slave_id, char location)
-{
-	i2c0_start();
 
-	i2c0_addr( slave_id & 0xFE);
-
-	lcd_str("OK2");
-	delay(500);
-	cmd(0x01);
-
-	
-	i2c0_location(location);
-	i2c0_stop();
-
-} 
-
-void i2c0_read_init(char slave_id, char location)
-{
-	i2c0_dummy_write(slave_id,location);
-	
-	i2c0_start();
-	i2c0_addr2(slave_id | 0x01);	
-}
 
 void eeprom_write()
 {
@@ -87,9 +65,9 @@ char eeprom_read()
 	/******DUMMY WRITE End********/
 
 	/******READ DATA Start********/
-	i2c0_Start();	
-	i2c0_Write(0xA1,0x40);	// Slave id = 0xA0, R/W = 1, Wait while I2C0STAT != 0X40
-	data = i2c0_Read();
+	i2c0_start();	
+	i2c0_write(0xA1,0x40);	// Slave id = 0xA0, R/W = 1, Wait while I2C0STAT != 0X40
+	data = i2c0_read();
 	i2c0_stop();
 	/******READ DATA End********/
 
@@ -99,9 +77,16 @@ char eeprom_read()
 
 int main()
 {
+	char data;
 	lcd_init();
 
 	eeprom_write();
+	debug("Data Written!");
+
+	debug("Reading data. .");
+	cmd(0xc0);
+	data = eeprom_read();
+	lcd_char(data);
 
 	while(1);
 }
