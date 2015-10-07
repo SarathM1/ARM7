@@ -95,6 +95,28 @@ void debug(char *str)
 	cmd(0x01);
 }
 
+void debug_int(int x)
+{
+	//delay(100);
+	//cmd(0x01);
+	cmd(0xc0);
+	lcd_int(x);
+	cmd(0x80);
+	//delay(100);
+	//cmd(0x01);
+}
+
+void debug_char(char x)
+{
+	//delay(100);
+	//cmd(0x01);
+	cmd(0xCA);
+	lcd_char(x);
+	cmd(0x80);
+	//delay(100);
+	//cmd(0x01);
+}
+
 void lcd_init()
 {
 	  IODIR1 |= 0x00FE0000;		 //   if bug, check IODIR1 = 0x00FE0000;  

@@ -1,6 +1,3 @@
-#include<lpc213x.h>
-#include "lcd.h"
-
 
 void i2c0_init()
 {
@@ -120,21 +117,4 @@ void eeprom_write_str(char *str)
 
 	i2c0_stop();
 }
-int main()
-{
-	char* str;
-	lcd_init();
 
-   	eeprom_write_str("1234");
-	
-	debug("Data Written!");
-
-	debug("Reading data. .");
-	
-	str = eeprom_read_str();
-	//ch = eeprom_read_char();
-	lcd_str(str);
-	//lcd_char(ch);
-	
-	while(1);
-}
