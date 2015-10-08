@@ -6,6 +6,7 @@ void delay(unsigned int x)
 		for(j=0;j<7777;j++);
 }
 
+
 void lcd_char(char ch)
 {
 	IO1CLR = 0xffffffff;
@@ -67,9 +68,58 @@ void cmd(char ch)
 	IO1CLR = 0xffffffff;
 
 }
+
+void lcd_int(long int num)
+{
+	char str[10];
+	int i,r,j;
+
+	for(i=0;i<4;i++,num/=10)
+	{
+		r = num%10;
+		str[i] = r + 48;
+	}
+	str[i]='\0';
+
+	for(j=i-1;j>=0;j--)
+		lcd_char(str[j]);
+
+}
+
+void debug(char *str)
+{
+	delay(100);
+	cmd(0x01);
+	lcd_str(str);
+	delay(100);
+	cmd(0x01);
+}
+
+void debug_int(int x)
+{
+	//delay(100);
+	//cmd(0x01);
+	cmd(0xc0);
+	lcd_int(x);
+	cmd(0x80);
+	//delay(100);
+	//cmd(0x01);
+}
+
+void debug_char(char x)
+{
+	//delay(100);
+	//cmd(0x01);
+	cmd(0xCA);
+	lcd_char(x);
+	cmd(0x80);
+	//delay(100);
+	//cmd(0x01);
+}
+
 void lcd_init()
 {
-	  IODIR1 = 0x00FE0000;
+	  IODIR1 |= 0x00FE0000;		 //   if bug, check IODIR1 = 0x00FE0000;  
 	  write_command(0x30); 
 	  delay(10);
 	  write_command(0x30);
@@ -83,7 +133,8 @@ void lcd_init()
 	cmd(0x06);	// Auto incre
 	cmd(0x0c);  // Cursor off
 	cmd(0x01);	// LCD Clear
-	
+
+//	debug("LCD On!!");
 }
 
 
