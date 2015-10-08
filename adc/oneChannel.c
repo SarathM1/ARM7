@@ -14,11 +14,11 @@
  	int val;
 	 adc_init();
 	lcd_init();	delay(100);
-	 data('a');
+	 lcd_char('a');
  	while(1) 
 	{
 		cmd(0x01); // Clear LCD
-		data('b');
+		lcd_char('b');
 		AD0CR |= 0x01000000;
 
 		//while( !(AD0DR & (1 <<31)) );  // Waiting for adc
@@ -28,7 +28,7 @@
 		val = (AD0DR & 0x0000FFC0) >> 6;
 		  
 		//val = 1234;
-		dispInt(val);
+		lcd_char(val);
 		delay(1000);		
 
 	}

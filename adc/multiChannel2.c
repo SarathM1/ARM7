@@ -26,7 +26,7 @@ int read_adc()
 
 	lcd_init();	delay(100);
 	
-	data('a');
+	lcd_char('a');
  	
 	while(1) 
 	{	cmd(0x01); // Clear LCD
@@ -35,7 +35,7 @@ int read_adc()
 		//AD0CR |= 0x01000000;  // Start ADC, Channel 0
 		x = read_adc();
 		cmd(0x80);
-		dispInt(x);
+		lcd_int(x);
 		uart_tx_num(x);
 		uart_tx_char(' ');
 		
@@ -43,7 +43,7 @@ int read_adc()
 		//AD0CR |= 0x01000000;  // Start ADC, Channel 0
 		y = read_adc();
 		cmd(0x85); 
-		dispInt(y);
+		lcd_int(y);
 		uart_tx_num(y);
 		uart_tx_char(' ');
 
@@ -53,7 +53,7 @@ int read_adc()
 		//AD0CR |= 0x01000000;  // Start ADC, Channel 0
 		z = read_adc();
 		cmd(0x8A); 
-		dispInt(z);
+		lcd_int(z);
 		uart_tx_num(z);
 		uart_tx_str("\r");
 
@@ -61,20 +61,20 @@ int read_adc()
 		if(x>600 )
 		{
 			cmd(0x01);
-			str("ALERT x = ");
+			lcd_str("ALERT x = ");
 			uart_tx_str("\nAlert x");
 			cmd(0xc0);
-			dispInt(x);
+			lcd_int(x);
 			delay(1000);
 			cmd(0x01);
 		}
 		if(y<300 )
 		{
 			cmd(0x01);
-			str("ALERT y = ");
+			lcd_str("ALERT y = ");
 			uart_tx_str("\nAlert y");
 			cmd(0xc0);
-			dispInt(y);
+			lcd_int(y);
 			delay(1000);
 			cmd(0x01);
 		}
