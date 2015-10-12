@@ -1,10 +1,15 @@
 #include<lpc21xx.h>
 #include "lcd.h"
+#include "uart0_inter.h"
 
 char x=1;
 char array1[64]={"INDIA IS MY COUNTRY AND ALL INDIANS ARE MY BROTHERS AND SISTERS"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
 char i,j;
 
+void uart(void)__irq // ISR for UART0
+{
+	VICVectAddr = 0;
+}
 void start(void)
 {
 	 I2CONSET=0x24;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
@@ -69,20 +74,7 @@ void i2c_init()
 	
 }
 
-void uart_init()
-{
-	PINSEL0 |= 0X00000001;
-	U0LCR   = 0X83;	                         //	 transmiting 8 bit data (bit 1:0 =11 for 8bit data).7th bit should be
-	U0DLL   = 0XC3;							 //  baud rate register 9600 (lsb )
-	U0DLM   = 0X00;	                         //  baud rate (msb)
-	U0LCR   = 0X03;
-}
 
-void uart_tx_char(char ch)
-{
-	U0THR=ch;
-	while((U0LSR & 0X20)!=0X20);
-}
 void eeprom_write()
 {
 	start();
