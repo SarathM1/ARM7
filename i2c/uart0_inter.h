@@ -4,8 +4,6 @@ Working Code
 ******************/
 
 
-#include<lpc213x.h>
-
 char resp[] = "OK";
 
 void uart(void)__irq;	  //Fn Declaration
@@ -29,7 +27,7 @@ void uart_tx_str(char *ch)
 
 void uart_init()
 {
-	PINSEL0 = 0x05; // Enable Txd0 on P0.0, Rxd0 on P0.1
+	PINSEL0 |= 0x05; // Enable Txd0 on P0.0, Rxd0 on P0.1
 	
 	U0IER = 0x01; // Enable RX interrupt
 	U0FCR = 0x01; //FIFO Enable
