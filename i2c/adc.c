@@ -12,7 +12,7 @@
  int main()
  {
  	int val;
-	 adc_init();
+	adc_init();
 	lcd_init();	delay(100);
 	while(1) 
 	{
