@@ -1,6 +1,9 @@
 #include<lpc213x.h>
 #include "lcd.h"
 
+int i;
+char array[64]={"INDIA IS MY COUNTRY AND ALL INDIANS ARE MY BROTHERS AND SISTERS"};    
+
 void i2c0_init()
 {
 	PINSEL0 = (1<<4)|(1<<6);
@@ -12,9 +15,35 @@ void i2c0_init()
 
 void i2c0_start()
 {
-	I2C0CONSET = (1<<5); // STA =1 				#
+	I2C0CONSET = (1<<5)|(1<<2); // STA =1 				#
+	I2C0CONCLR=0x08;
 	while(I2C0STAT!=0X08); // wait for acknowlege from slave
 }
+
+void devadd1(void)
+{
+	I2C0DAT=0XA0;
+	I2C0CONSET=0X04;
+	I2C0CONCLR=0X08;
+	while(I2C0STAT!=0X18);
+}
+
+void devadd2(void)
+{
+	I2C0DAT=0XA1;
+	I2C0CONSET=0X04;
+	I2C0CONCLR=0X08;
+	while(I2C0STAT!=0X40);
+}
+
+void location(int add)
+{
+	I2C0DAT=add;
+	I2C0CONSET=0X04;
+	I2C0CONCLR=0X28;
+	while(I2C0STAT != 0X28);
+}
+
 
 void i2c0_stop()
 {
@@ -22,15 +51,15 @@ void i2c0_stop()
 	I2C0CONCLR = (1<<3);			//Clear SIC
 }
 
-void i2c0_write(char data,unsigned char status)
+void writeData(char data)
 {
 	I2C0DAT 	= data;   // Data valid before other steps		#
 	I2C0CONSET = (1<<2);
-	I2C0CONCLR = (1<<3) | (1<<5);	// SIC = 1, STAC = 1		 #
-	while(I2C0STAT != status);
+	I2C0CONCLR = (1<<3);	// SIC = 1		 #
+	while(I2C0STAT != 0x28);
 }
 
-char i2c0_read()
+char readData()
 {
 	I2C0CONSET = (1<<2);
 	I2C0CONCLR = (1<<3) | (1<<5);	// SIC = 1, STAC = 1
@@ -39,54 +68,74 @@ char i2c0_read()
 }
 
 
-
-
-
 void eeprom_write()
 {
-	i2c0_init();
 	i2c0_start();
-	i2c0_write(0xA0,0x18);	// Slave id = 0xA0, Wait while I2C0STAT != 0X18
-	i2c0_write(0x00,0x28);		// Read from location 0x00, Wait while I2C0STAT != 0X28
-	i2c0_write('A',0x28);	// Data = 'A' , wait  while I2C0STAT != 0X28
+	devadd1();
+	location(0x00);
+	for(i=0;i<=15;i++)
+		writeData(array[i]);	// Data = 'A' , wait  while I2C0STAT != 0X28
 	i2c0_stop();
 }
 
+void dummy_write()
+{
+	i2c0_start();
+	devadd1();
+	location(0x00);
+	i2c0_stop();
+}
 char eeprom_read()
 {
 	char data;
 
 	/******DUMMY WRITE Start********/
-	i2c0_init();
-	i2c0_start();
-	i2c0_write(0xA0,0x18);	// Slave id = 0xA0, R/W = 0, Wait while I2C0STAT != 0X18
-	i2c0_write(0x00,0x28);		// Read from location 0x00, Wait while I2C0STAT != 0X28
-	i2c0_stop();
+	
 	/******DUMMY WRITE End********/
 
 	/******READ DATA Start********/
-	i2c0_start();	
-	i2c0_write(0xA1,0x40);	// Slave id = 0xA0, R/W = 1, Wait while I2C0STAT != 0X40
-	data = i2c0_read();
+	i2c0_start();
+	devadd2();
+	for(i=0;i<=15;i++)
+	{	data = readData();
+	 	lcd_char(data);
+	 }
 	i2c0_stop();
+	I2C0CONSET = 0X	
 	/******READ DATA End********/
 
 	return (data);
 
 }
 
+void delay2(int b)
+{
+	while(b!=0)
+	{
+		b--;
+	}
+}
+
+
 int main()
 {
 	char data;
 	lcd_init();
-
+	i2c0_init();
 	eeprom_write();
+	delay2(20000);
 	debug("Data Written!");
-
-	debug("Reading data. .");
-	cmd(0xc0);
-	data = eeprom_read();
-	lcd_char(data);
-
-	while(1);
+	dummy_write();
+	while(1)
+	{
+		//debug("Reading data. .");
+		//cmd(0xc0);
+		data = eeprom_read();
+		delay2(150000);
+		delay2(150000);
+		delay2(150000);
+		delay2(150000);
+		lcd_char(data);
+	}
+	//while(1);
 }
