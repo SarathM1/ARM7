@@ -1,4 +1,5 @@
 #include<lpc21xx.h>
+
 void delay(int b);
 char x=1;
 char array1[64]={"INDIA IS MY COUNTRY AND ALL INDIANS ARE MY BROTHERS AND SISTERS"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
@@ -84,7 +85,7 @@ int main()
 	{
 		
 		
-		/************************************************************/
+		/***********************WRITING DATA*************************************/
 		start();
 		devadd1();
 		location(0x00);
@@ -93,8 +94,8 @@ int main()
 		writedata1();
 		}
 		stop();
-		delay(20000);
-		/******************************************DEMMY WRITE**************************************/
+		delay(20000);		  // delay 0.001666 Seconds. I2c won't work if removed
+		/******************************************DUMMY WRITE**************************************/
 		start();
 		devadd1();
 		location(0x00);
@@ -108,12 +109,8 @@ int main()
 		readdata();
 		}
 		stop();
-		
-		
-		
-		
-		
-		 delay(150000);     delay(150000); delay(150000); delay(150000);
+
+		// delay(150000);     delay(150000); delay(150000); delay(150000);
 	}
 	
 }
