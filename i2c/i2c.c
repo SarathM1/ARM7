@@ -3,7 +3,7 @@
 
 char x=1;
 char array1[64]={"INDIA IS MY COUNTRY AND ALL INDIANS ARE MY BROTHERS AND SISTERS"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
-char i,j,DATA=0;
+char i,j;
 
 void start(void)
 {
@@ -50,61 +50,78 @@ void writedata1(void)
 	while(I2STAT != 0X28);
 }
 
-void readdata(void)
+char readdata(void)
 {
 	I2CONSET=0X04;
 	I2CONCLR=0X28;
 	while(I2STAT!=0X50);
-	
-	DATA=I2DAT; 
-	U0THR=DATA;
-	while((U0LSR & 0X20)!=0X20);
+	return I2DAT; 
 }
 
-int main()
+void i2c_init()
 {
-	IO0SET=0X0000000D;	   //SETTING SCL0,SDA0 & TX PIN SET FOR O/P
-	PINSEL0=0X00000051;
-	U0LCR   = 0X83;	                         //	 transmiting 8 bit data (bit 1:0 =11 for 8bit data).7th bit should be
-	U0DLL   = 0XC3;							 //  baud rate register 9600 (lsb )
-	U0DLM   = 0X00;	                         //  baud rate (msb)
-	U0LCR   = 0X03;
+	//IO0SET=0X0000000D;	   //SETTING SCL0,SDA0 & TX PIN SET FOR O/P
+	PINSEL0 |= 0X00000050;
 	I2CONCLR=0XFF;
 	I2CONSET=0X44;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
 	I2SCLL=0X96;
 	I2SCLH=0X96;
 	
+}
+
+void uart_init()
+{
+	PINSEL0 |= 0X00000001;
+	U0LCR   = 0X83;	                         //	 transmiting 8 bit data (bit 1:0 =11 for 8bit data).7th bit should be
+	U0DLL   = 0XC3;							 //  baud rate register 9600 (lsb )
+	U0DLM   = 0X00;	                         //  baud rate (msb)
+	U0LCR   = 0X03;
+}
+
+void uart_tx_char(char ch)
+{
+	U0THR=ch;
+	while((U0LSR & 0X20)!=0X20);
+}
+void eeprom_write()
+{
+	start();
+	devadd1();
+	location(0x00);
+	for(i=0;i<=15;i++)	   //array[i]!='\0';
+	{
+		writedata1();
+	}
+	stop();
+	delay(2);		  // delay 2 ms. I2c won't work if removed
+}
+
+void eeprom_read()
+{
+	/***********************WRITING DATA*************************************/
+	start();
+	devadd1();
+	location(0x00);
+	stop();
+	
+	/******************************************READ********************************************/
+	start();
+	devadd2();
+	for(j=0;j<=64;j++)
+	{
+		uart_tx_char(readdata());
+	}
+	stop();
+}
+
+int main()
+{
+	i2c_init();
+	uart_init();
+	
 	while(1)
 	{
-		
-		
-		/***********************WRITING DATA*************************************/
-		start();
-		devadd1();
-		location(0x00);
-		for(i=0;i<=15;i++)	   //array[i]!='\0';
-		{
-		writedata1();
-		}
-		stop();
-		delay(2);		  // delay 2 ms. I2c won't work if removed
-		/******************************************DUMMY WRITE**************************************/
-		start();
-		devadd1();
-		location(0x00);
-		stop();
-		
-		/******************************************READ********************************************/
-		start();
-		devadd2();
-		for(j=0;j<=64;j++)
-		{
-		readdata();
-		}
-		stop();
-
-		
+		eeprom_read();	
 	}
-	
 }
 
