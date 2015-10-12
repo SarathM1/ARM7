@@ -1,6 +1,6 @@
 #include<lpc21xx.h>
+#include "lcd.h"
 
-void delay(int b);
 char x=1;
 char array1[64]={"INDIA IS MY COUNTRY AND ALL INDIANS ARE MY BROTHERS AND SISTERS"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
 char i,j,DATA=0;
@@ -61,13 +61,6 @@ void readdata(void)
 	while((U0LSR & 0X20)!=0X20);
 }
 
-void delay(int b)
-{
-	while(b!=0)
-	{
-		b--;
-	}
-}
 int main()
 {
 	IO0SET=0X0000000D;	   //SETTING SCL0,SDA0 & TX PIN SET FOR O/P
@@ -94,7 +87,7 @@ int main()
 		writedata1();
 		}
 		stop();
-		delay(20000);		  // delay 0.001666 Seconds. I2c won't work if removed
+		delay(2);		  // delay 2 ms. I2c won't work if removed
 		/******************************************DUMMY WRITE**************************************/
 		start();
 		devadd1();
