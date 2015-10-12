@@ -119,22 +119,22 @@ void debug_char(char x)
 
 void lcd_init()
 {
-	  IODIR1 |= 0x00FE0000;		 //   if bug, check IODIR1 = 0x00FE0000;  
-	  write_command(0x30); 
-	  delay(10);
-	  write_command(0x30);
-	  delay(10);
-	  write_command(0x30);
-	  delay(10);
-	  write_command(0x20);
-
-
+	IODIR1 |= 0x00FE0000;		 //   if bug, check IODIR1 = 0x00FE0000;  
+	write_command(0x30); 
+	delay(10);
+	write_command(0x30);
+	delay(10);
+	write_command(0x30);
+	delay(10);
+	write_command(0x20);
+	
+	
 	cmd(0x28);  // 4 bit mode
 	cmd(0x06);	// Auto incre
 	cmd(0x0c);  // Cursor off
 	cmd(0x01);	// LCD Clear
 
-	
+	debug("LCD ON!!");
 }
 
 char *int_to_str(long int num)
