@@ -1,7 +1,7 @@
 #include<lpc213x.h>
 #include<stdlib.h>
 #include "lcd.h"
-#include "eeprom.h"
+#include "i2c.h"
 #include "adc.h"
 #include "uart0_inter.h"
 
@@ -42,35 +42,35 @@ int main()
 	lcd_init();
 	adc_init();
 	uart_init();
-	i2c0_init();
+	i2c_init();
 	
 	while(1)
 	{
-	//	if(flag ==1)
-	//	{
-		//	eeprom_write_str(threshold);
-	//		flag=0;
-	//	}
+		if(flag ==1)
+		{
+			eeprom_write_str(threshold);
+			flag=0;
+		}
 		
-		adc_val = adc_read();cmd(0x8A);
-		eeprom_read_str();
-		thresh_val = 1234;
+		adc_val = adc_read();
+		cmd(0x8A);
+		thresh_val = atoi(eeprom_read_str());
+		//thresh_val = 1234;
 		
-		//cmd(0xc0);
-		//lcd_int(adc_val);
-		//cmd(0xCA);
-		//lcd_int(thresh_val);
+		cmd(0xc0);
+		lcd_int(adc_val);
+		cmd(0xCA);
+		lcd_int(thresh_val);
 
 		if(adc_val == thresh_val)
 		{
-		//	cmd(0x80);
-		//	lcd_str("ALARM!!");
+			cmd(0x80);
+			lcd_str("ALARM!!");
 		}
 		else
 		{
-		//	cmd(0x80);
-		//	lcd_str(". . .");
-		
+			cmd(0x80);
+			lcd_str(". . .");
 		}
 		debug("done1");
 	}			 
