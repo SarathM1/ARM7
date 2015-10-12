@@ -74,7 +74,7 @@ void lcd_int(long int num)
 	char str[10];
 	int i,r,j;
 
-	for(i=0;i<2;i++,num/=10)
+	for(i=0;i<4;i++,num/=10)
 	{
 		r = num%10;
 		str[i] = r + 48;
@@ -88,10 +88,10 @@ void lcd_int(long int num)
 
 void debug(char *str)
 {
-	delay(100);
+	delay(50);
 	cmd(0x01);
 	lcd_str(str);
-	delay(100);
+	delay(50);
 	cmd(0x01);
 }
 
@@ -99,9 +99,9 @@ void debug_int(int x)
 {
 	//delay(100);
 	//cmd(0x01);
-	cmd(0xc0);
+	//cmd(0xc0);
 	lcd_int(x);
-	cmd(0x80);
+	//cmd(0x80);
 	//delay(100);
 	//cmd(0x01);
 }
@@ -110,9 +110,9 @@ void debug_char(char x)
 {
 	//delay(100);
 	//cmd(0x01);
-	cmd(0xCA);
+	//cmd(0xCA);
 	lcd_char(x);
-	cmd(0x80);
+	//cmd(0x80);
 	//delay(100);
 	//cmd(0x01);
 }
@@ -134,7 +134,24 @@ void lcd_init()
 	cmd(0x0c);  // Cursor off
 	cmd(0x01);	// LCD Clear
 
-	debug("LCD On!!");
+	
 }
 
+char *int_to_str(long int num)
+{
+	char str1[10],*str2;
+	int i,r,j;
 
+	for(i=0;i<4;i++,num/=10)
+	{
+		r = num%10;
+		str1[i] = r + 48;
+	}
+	str1[i]='\0';
+
+	for(i=i-1,j=0;i>=0;i--,j++)
+		str2[j] = str1[i];
+	
+	str2[j]='\0';
+	return str2;
+}
