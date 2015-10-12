@@ -1,9 +1,9 @@
 
 void start(void)
 {
-	 I2C0CONSET=0x24;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
-	 I2C0CONCLR=0x08;
-	 while(I2C0STAT!=0X08);
+	I2C0CONSET=0x24;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
+	I2C0CONCLR=0x08;
+	while(I2C0STAT!=0X08);
 }
 
 void devadd1(void)
@@ -36,7 +36,7 @@ void stop(void)
 	I2C0CONCLR=0X08;
 }
 
-void writedata1(char ch)
+void writedata(char ch)
 {
 	I2C0DAT = ch;
 	I2C0CONSET=0X04;
@@ -70,10 +70,11 @@ void eeprom_write_str(char *str)
 	start();
 	devadd1();
 	location(0x00);
-	for(i=0;i<=15;i++)	   //array[i]!='\0';
+	for(i=0;str[i]!='\0';i++)
 	{
-		writedata1(str[i]);
+		writedata(str[i]);
 	}
+	writedata('\0');
 	stop();
 	delay(2);		  // delay 2 ms. I2c won't work if removed
 }
@@ -91,11 +92,15 @@ char* eeprom_read_str()
 	/******************************************READ********************************************/
 	start();
 	devadd2();
-	for(j=0;j<=64;j++)
+	for(j=0;j<4;j++)
 	{
 		str[j]= readdata();
 	}
 	str[j] = '\0';
+	
+	for(j=0;str[j]!='\0';j++)
+		debug_char(str[j]);
+
 	stop();
 	return str;
 }
