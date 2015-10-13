@@ -79,10 +79,33 @@ void eeprom_write_str(char *str)
 	delay(2);		  // delay 2 ms. I2c won't work if removed
 }
 
-char* eeprom_read_str()
+//char* eeprom_read_str()
+//{
+//	int j;
+//	char *str;
+//	/***********************WRITING DATA*************************************/
+//	start();
+//	devadd1();
+//	location(0x00);
+//	stop();
+//	
+//	/******************************************READ********************************************/
+//	start();
+//	devadd2();
+//	for(j=0;j<4;j++)
+//	{
+//		str[j]= readdata();
+//	}
+//	str[j] = '\0';
+//	
+//	debug("done1");
+//	stop();
+//	return str;
+//}
+
+void eeprom_read_str()
 {
 	int j;
-	char *str;
 	/***********************WRITING DATA*************************************/
 	start();
 	devadd1();
@@ -94,16 +117,9 @@ char* eeprom_read_str()
 	devadd2();
 	for(j=0;j<4;j++)
 	{
-		str[j]= readdata();
+		uart_tx_char(readdata());
 	}
-	str[j] = '\0';
-	
-	for(j=0;str[j]!='\0';j++)
-		debug_char(str[j]);
-
 	stop();
-	return str;
 }
-
 
 
