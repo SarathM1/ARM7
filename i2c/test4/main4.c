@@ -56,7 +56,6 @@ char readdata(void)
 
 void i2c_init()
 {
-	//IO0SET=0X0000000D;	   //SETTING SCL0,SDA0 & TX PIN SET FOR O/P
 	PINSEL0 |= 0X00000050;
 	I2C0CONCLR=0XFF;
 	I2C0CONSET=0X44;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
@@ -94,14 +93,9 @@ int main()
 	uart_init();
 	while(1)
 	{
-		   	//I2C0CONCLR=0X40;
-			//I2C0CONSET=0X40;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
-			
-			//delay(500);
-			uart_tx_str("\r\nReading from eeprom\r\n");
+		   	uart_tx_str("\r\nReading from eeprom\r\n");
 			eeprom_read();
 			uart_tx_str("\r\nDONE!!\r\n");
-			//delay(500);	
 	}
 }
 
