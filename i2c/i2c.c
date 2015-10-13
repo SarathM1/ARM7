@@ -8,6 +8,7 @@ char i,j;
 
 void uart(void)__irq // ISR for UART0
 {
+	uart_tx_char(U0RBR);
 	VICVectAddr = 0;
 }
 void start(void)
@@ -113,7 +114,8 @@ int main()
 	while(1)
 	{
 		eeprom_write();	
-		eeprom_read();	
+		eeprom_read();
+		delay(500);	
 	}
 }
 
