@@ -1,40 +1,11 @@
 #include<lpc213x.h>
+#include<stdlib.h>
 #include "lcd.h"
 #include "uart0_inter.h"
 #include "adc.h"
 
-char x=1;
-char threshold[5]={""};    
-char i,j;
 
 int flag = 0;
-
-void uart(void)__irq // ISR for UART0
-{
-	static int i = 0;
-	char ch;
-	ch = U0RBR; 		// Echo what is recieved
-	
-	uart_tx_char(ch);
-	
-	if(ch=='*')
-	{
-		i=0;
-		flag=0;
-		//threshold[0]='\0';
-	}
-	else if(ch=='#')
-	{
-		threshold[4]='\0';
-		flag=1;
-	}
-	else
-	{
-		threshold[i++]=ch;		
-	}		
-	
-	VICVectAddr = 0;	// Compulsary in all ISR's
-}
 
 void start(void)
 {
@@ -73,9 +44,9 @@ void stop(void)
 	I2C0CONCLR=0X08;
 }
 
-void writedata1(void)
+void writedata(char ch)
 {
-	I2C0DAT=threshold[i];
+	I2C0DAT=ch;
 	I2C0CONSET=0X04;
 	I2C0CONCLR=0X08;
 	while(I2C0STAT != 0X28);
@@ -100,23 +71,28 @@ void i2c_init()
 	
 }
 
-
-void eeprom_write()
+void eeprom_write_str(char* str)
 {
+	int k;
 	start();
+	uart_tx_char('?');
 	devadd1();
 	location(0x00);
-	for(i=0;i<=15;i++)	   //array[i]!='\0';
+	for(k=0;str[k]!='\0';k++)	   //array[i]!='\0';
 	{
-		writedata1();
+		writedata(str[k]);
+		cmd(0xCA);
+		debug_int(k);
 	}
 	stop();
 	delay(2);		  // delay 2 ms. I2c won't work if removed
 }
 
-void eeprom_read()
+void eeprom_read_str()
 {
-	/***********************WRITING DATA*************************************/
+	int k;
+	char *val;	
+	/***********************DUMMY WRITE *************************************/
 	start();
 	devadd1();
 	location(0x00);
@@ -125,21 +101,115 @@ void eeprom_read()
 	/******************************************READ********************************************/
 	start();
 	devadd2();
-	for(j=0;j<=64;j++)
+	for(k=0;k<4;k++)
 	{
-		uart_tx_char(readdata());
+		val[k] = readdata();
 	}
+	val[k]='\0';
 	stop();
+	delay(500);
+	
+	debug_str(val);
+	//return val;
 }
+
+//void eeprom_write()
+//{
+//	int k;
+//	start();
+//	devadd1();
+//	location(0x00);
+//	for(k=0;k<=15;k++)	   
+//	{
+//		writedata();
+//	}
+//	stop();
+//	delay(2);		  // delay 2 ms. I2c won't work if removed
+//}
+
+//void eeprom_read()
+//{
+//	int k;	
+//	/***********************DUMMY WRITE *************************************/
+//	start();
+//	devadd1();
+//	location(0x00);
+//	stop();
+//	
+//	/******************************************READ********************************************/
+//	start();
+//	devadd2();
+//	for(k=0;k<=64;k++)
+//	{
+//		uart_tx_char(readdata());
+//	}
+//	stop();
+//}
+
+
+void uart(void)__irq // ISR for UART0
+{
+	static int i = 0;
+	char threshold[5];    
+
+	char ch;
+	ch = U0RBR; 		// Echo what is recieved
+	
+	uart_tx_char(ch);
+	
+	if(ch=='*')
+	{
+		i=0;
+		flag=1;
+	}
+	else if(ch=='#')
+	{
+		flag=0;
+		threshold[i]='\0';
+		eeprom_write_str(threshold);
+		
+		//debug_str(threshold);
+	}
+	else
+	{
+		threshold[i++]=ch;		
+	}		
+	
+	VICVectAddr = 0;	// Compulsary in all ISR's
+}
+
 
 int main()
 {
-	i2c_init();
+	int adc_val,thresh_val;
+	lcd_init();
+	adc_init();
 	uart_init();
+	i2c_init();
+
+	//thresh_val = atoi(eeprom_read_str());
+	//thresh_val =  atoi("1234");
+	eeprom_read_str();
+//	debug_int(thresh_val);
+	while(1);
+
 	while(1)
 	{
-		eeprom_write();	
-		eeprom_read();	
+		if(flag == 0)
+		{
+			adc_val = adc_read();
+
+			if(adc_val == thresh_val)
+			{
+				cmd(0x80);
+				lcd_str("ALARM!!");
+			}
+			else
+			{
+				cmd(0x80);
+				lcd_str(". . .");
+			}
+		}	
 	}
 }
 
