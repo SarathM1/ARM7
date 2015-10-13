@@ -2,31 +2,18 @@
 #include "lcd.h"
 #include "uart0_inter.h"
 
-char flag=1;
-char array1[]={". . . ."};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
-char i;
+//char flag=1;
+//char array1[11]={"123456789"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
+//char i;
+//int j;
+
+//char x=1;
+//char array1[64]={"INDIA IS MY COUNTRY AND ALL INDIANS ARE MY BROTHERS AND SISTERS"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
+unsigned char i,j;
 
 void uart(void)__irq // ISR for UART0
 {
-	char ch;
-	static int k;
-	ch = U0RBR;
-	uart_tx_char(ch);	// Echo received character
-
-	if(ch == '*')
-	{
-		k=0;
-
-	}
-	else if(ch == '#')
-	{
-		flag = 1;
-	}
-	else
-	{
-		array1[k] = ch;
-		k++;
-	}
+	uart_tx_char(U0RBR);
 	VICVectAddr = 0;
 }
 void start(void)
@@ -66,13 +53,13 @@ void stop(void)
 	I2C0CONCLR=0X08;
 }
 
-void writedata1(void)
-{
-	I2C0DAT=array1[i];
-	I2C0CONSET=0X04;
-	I2C0CONCLR=0X08;
-	while(I2C0STAT != 0X28);
-}
+//void writedata1(void)
+//{
+//	I2C0DAT=array1[i];
+//	I2C0CONSET=0X04;
+//	I2C0CONCLR=0X08;
+//	while(I2C0STAT != 0X28);
+//}
 
 char readdata(void)
 {
@@ -94,22 +81,21 @@ void i2c_init()
 }
 
 
-void eeprom_write()
-{
-	start();
-	devadd1();
-	location(0x00);
-	for(i=0;i<4;i++)	   //array[i]!='\0';
-	{
-		writedata1();
-	}
-	stop();
-	delay(2);		  // delay 2 ms. I2c won't work if removed
-}
+//void eeprom_write()
+//{
+//	start();
+//	devadd1();
+//	location(0x00);
+//	for(i=0;i<=15;i++)	   //array[i]!='\0';
+//	{
+//		writedata1();
+//	}
+//	stop();
+//	delay(2);		  // delay 2 ms. I2c won't work if removed
+//}
 
 void eeprom_read()
 {
-	int j;
 	/***********************WRITING DATA*************************************/
 	start();
 	devadd1();
@@ -119,12 +105,13 @@ void eeprom_read()
 	/******************************************READ********************************************/
 	start();
 	devadd2();
-	for(j=0;j<4;j++)
+	for(j=0;j<=11;j++)
 	{
 		uart_tx_char(readdata());
 	}
 	stop();
 }
+
 
 int main()
 {
@@ -135,10 +122,9 @@ int main()
 	//	if(flag == 1)
 		{
 			uart_tx_str("flag = 1");
-			eeprom_write();	
+			//eeprom_write();	
 			uart_tx_str("Data written");
 			eeprom_read();
-			flag = 0;
 			
 		}
 		delay(500);	
