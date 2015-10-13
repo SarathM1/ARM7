@@ -97,24 +97,18 @@ void debug(char *str)
 
 void debug_int(int x)
 {
-	//delay(100);
-	//cmd(0x01);
-	//cmd(0xc0);
 	lcd_int(x);
-	//cmd(0x80);
-	//delay(100);
-	//cmd(0x01);
 }
 
 void debug_char(char x)
 {
-	//delay(100);
-	//cmd(0x01);
-	//cmd(0xCA);
 	lcd_char(x);
-	//cmd(0x80);
-	//delay(100);
-	//cmd(0x01);
+}
+
+void debug_str(char* str)
+{
+	cmd(0xc0);
+	lcd_str(str);
 }
 
 void lcd_init()
