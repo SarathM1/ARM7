@@ -1,6 +1,17 @@
 #include"LPC213x.h"
 
+#define SLAV_ADDR 0XA0
+#define SIC 3
+#define STAC 5
+#define I2ENC 6
+
+#define	 STO 4
+#define	 STA 5
+#define	 I2EN 6
+//#define
+
 char data[] = "some data";
+
 int i=0;
 //__irq void I2C_ISR()
 void I2C_ISR(void)__irq
@@ -10,7 +21,7 @@ void I2C_ISR(void)__irq
 	switch(temp)
 	{
 		case 8:					/* Start condition transmitted */
-			I2C0DAT=0XA0;  		/* Slave address + write */
+			I2C0DAT = SLAV_ADDR; /* Slave address + write */
 			I2C0CONCLR=0x28; 	/* Clear SI and Start flag */
 			break;
 		
