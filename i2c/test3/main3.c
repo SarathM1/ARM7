@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include "lcd.h"
 #include "uart0_inter.h"
+#include "adc.h"
 
 char  val[5];	
 //int flag = 1;
@@ -96,7 +97,6 @@ char* eeprom_read_str()
 	char ch;
 	/***********************WRITING DATA*************************************/
 	start();
-	uart_tx_str("\r\nhere\r\n");
 	devadd1();
 	location(0x00);
 	stop();
@@ -149,17 +149,36 @@ void uart(void)__irq // ISR for UART0
 int main()
 {
 	int thresh_val;
+	int adc_val;
+	adc_init();
 	i2c_init();
 	uart_init();
 	lcd_init();
 	
 	while(1)
 	{
-		   	uart_tx_str("\r\nReading from eeprom\r\n");
+		   	//uart_tx_str("\r\nReading from eeprom\r\n");
 			thresh_val = atoi(eeprom_read_str());
 			uart_tx_int(thresh_val);
-			uart_tx_str("\r\nDONE!!\r\n");
-			delay(500);
+			uart_tx_str("\r\n");
+			//uart_tx_str("\r\nDONE!!\r\n");
+
+			adc_val = adc_read();
+			cmd(0x8A);
+			lcd_int(adc_val);
+
+			if(adc_val > thresh_val)
+			{
+				cmd(0x80);
+				lcd_str("ALARM!!");
+			}
+			else
+			{
+				cmd(0x80);
+				lcd_str(". . . .");
+			}
+
+			delay(100);
 	}
 }
 
