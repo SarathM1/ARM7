@@ -110,9 +110,9 @@ int main()
 {
 	i2c_init();
 	uart_init();
-	
 	while(1)
 	{
+		eeprom_write();	
 		eeprom_read();	
 	}
 }
