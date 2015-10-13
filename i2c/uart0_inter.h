@@ -23,7 +23,18 @@ void uart_tx_str(char *ch)
 	}
 }
 
+void uart_tx_int(int num)
+{
+	char temp[15];
+	int k;
+	for(k=0;num>0;num/=10,k++)
+		temp[k] = ( num%10 + 48);
+	temp[k] = '\0';
 
+	for(k=k-1;k>=0;k--)
+		uart_tx_char(temp[k]);
+
+}
 
 void uart_init()
 {
