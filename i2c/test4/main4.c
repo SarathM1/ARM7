@@ -2,13 +2,6 @@
 #include "lcd.h"
 #include "uart0_inter.h"
 
-//char flag=1;
-//char array1[11]={"123456789"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
-//char i;
-//int j;
-
-//char x=1;
-//char array1[64]={"INDIA IS MY COUNTRY AND ALL INDIANS ARE MY BROTHERS AND SISTERS"};    //SHIJU VARGHESE CHIRAKKALAKATHU  THADIKKADAVU	
 unsigned char i,j;
 
 void uart(void)__irq // ISR for UART0
@@ -53,14 +46,6 @@ void stop(void)
 	I2C0CONCLR=0X08;
 }
 
-//void writedata1(void)
-//{
-//	I2C0DAT=array1[i];
-//	I2C0CONSET=0X04;
-//	I2C0CONCLR=0X08;
-//	while(I2C0STAT != 0X28);
-//}
-
 char readdata(void)
 {
 	I2C0CONSET=0X04;
@@ -81,18 +66,6 @@ void i2c_init()
 }
 
 
-//void eeprom_write()
-//{
-//	start();
-//	devadd1();
-//	location(0x00);
-//	for(i=0;i<=15;i++)	   //array[i]!='\0';
-//	{
-//		writedata1();
-//	}
-//	stop();
-//	delay(2);		  // delay 2 ms. I2c won't work if removed
-//}
 
 void eeprom_read()
 {
@@ -105,7 +78,7 @@ void eeprom_read()
 	/******************************************READ********************************************/
 	start();
 	devadd2();
-	for(j=0;j<=11;j++)
+	for(j=0;j<=64;j++)
 	{
 		uart_tx_char(readdata());
 	}
@@ -119,15 +92,11 @@ int main()
 	uart_init();
 	while(1)
 	{
-	//	if(flag == 1)
-		{
-			uart_tx_str("flag = 1");
-			//eeprom_write();	
-			uart_tx_str("Data written");
+	
+			uart_tx_str("\r\nReading from eeprom\r\n");
 			eeprom_read();
-			
-		}
-		delay(500);	
+			uart_tx_str("\r\nDONE!!\r\n");
+			delay(500);	
 	}
 }
 
