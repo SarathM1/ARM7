@@ -1,9 +1,12 @@
+unsigned char i;
+char  val[5];
+int flag=1;
 
 void start(void)
 {
-	I2C0CONSET=0x24;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
-	I2C0CONCLR=0x08;
-	while(I2C0STAT!=0X08);
+	 I2C0CONSET=0x64;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
+	 I2C0CONCLR=0x08;
+	 while(I2C0STAT!=0X08);
 }
 
 void devadd1(void)
@@ -33,16 +36,10 @@ void location(int add)
 void stop(void)
 { 
 	I2C0CONSET=0X14;		  	//SEND STOP BIT(STO) & ACKNOWEDGE FLAG SET
-	I2C0CONCLR=0X08;
+	I2C0CONCLR=0X48;
 }
 
-void writedata(char ch)
-{
-	I2C0DAT = ch;
-	I2C0CONSET=0X04;
-	I2C0CONCLR=0X08;
-	while(I2C0STAT != 0X28);
-}
+
 
 char readdata(void)
 {
@@ -52,9 +49,32 @@ char readdata(void)
 	return I2C0DAT; 
 }
 
+void writedata(char ch)
+{
+	I2C0DAT=ch;
+	I2C0CONSET=0X04;
+	I2C0CONCLR=0X08;
+	while(I2C0STAT != 0X28);
+	delay(10);
+}
+
+void eeprom_write_str(char* str)
+{
+	int k;
+	start();
+	uart_tx_str("\r\nUPDATING THRESHOLD VALUE!!");
+	devadd1();
+	location(0x00);
+	for(k=0;str[k]!='\0';k++)	   //array[i]!='\0';
+	{
+		writedata(str[k]);
+	}
+	stop();
+	delay(2);		  // delay 2 ms. I2c won't work if removed
+}
+
 void i2c_init()
 {
-	//IO0SET=0X0000000D;	   //SETTING SCL0,SDA0 & TX PIN SET FOR O/P
 	PINSEL0 |= 0X00000050;
 	I2C0CONCLR=0XFF;
 	I2C0CONSET=0X44;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
@@ -64,48 +84,10 @@ void i2c_init()
 }
 
 
-void eeprom_write_str(char *str)
-{
-	int i;
-	start();
-	devadd1();
-	location(0x00);
-	for(i=0;str[i]!='\0';i++)
-	{
-		writedata(str[i]);
-	}
-	writedata('\0');
-	stop();
-	delay(2);		  // delay 2 ms. I2c won't work if removed
-}
-
-//char* eeprom_read_str()
-//{
-//	int j;
-//	char *str;
-//	/***********************WRITING DATA*************************************/
-//	start();
-//	devadd1();
-//	location(0x00);
-//	stop();
-//	
-//	/******************************************READ********************************************/
-//	start();
-//	devadd2();
-//	for(j=0;j<4;j++)
-//	{
-//		str[j]= readdata();
-//	}
-//	str[j] = '\0';
-//	
-//	debug("done1");
-//	stop();
-//	return str;
-//}
-
-void eeprom_read_str()
+char* eeprom_read_str()
 {
 	int j;
+	char ch;
 	/***********************WRITING DATA*************************************/
 	start();
 	devadd1();
@@ -117,9 +99,13 @@ void eeprom_read_str()
 	devadd2();
 	for(j=0;j<4;j++)
 	{
-		uart_tx_char(readdata());
+		ch = readdata();
+		val[j] = ch;
+		if(ch == '\0')
+			break;
 	}
 	stop();
+	return val;
 }
 
 
