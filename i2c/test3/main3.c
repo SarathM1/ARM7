@@ -5,7 +5,7 @@
 #include "adc.h"
 
 char  val[5];	
-
+int flag=1;
 
 void start(void)
 {
@@ -60,6 +60,7 @@ void writedata(char ch)
 	I2C0CONSET=0X04;
 	I2C0CONCLR=0X08;
 	while(I2C0STAT != 0X28);
+	delay(10);
 }
 
 void eeprom_write_str(char* str)
@@ -72,8 +73,6 @@ void eeprom_write_str(char* str)
 	for(k=0;str[k]!='\0';k++)	   //array[i]!='\0';
 	{
 		writedata(str[k]);
-		cmd(0xCA);
-		debug_int(k);
 	}
 	stop();
 	delay(2);		  // delay 2 ms. I2c won't work if removed
@@ -130,10 +129,12 @@ void uart(void)__irq // ISR for UART0
 	else if(ch == '#')
 	{
 		threshold[i] = '\0';
+		flag = 0;	 					// Blocking eeprom_read_str in main
 		eeprom_write_str(threshold);
 		debug_str("Written to eeprom!!");
-		delay(500);
+		delay(1000);
 		cmd(0x01);
+		flag = 1;					// Resuming main
 		//flag = 1;	
 	}
 	else
@@ -156,28 +157,29 @@ int main()
 	
 	while(1)
 	{
-		   	//uart_tx_str("\r\nReading from eeprom\r\n");
-			thresh_val = atoi(eeprom_read_str());
-			uart_tx_int(thresh_val);
-			uart_tx_str("\r\n");
-			//uart_tx_str("\r\nDONE!!\r\n");
-
-			adc_val = adc_read();
-			cmd(0x8A);
-			lcd_int(adc_val);
-
-			if(adc_val > thresh_val)
+			if(flag == 1)
 			{
-				cmd(0x80);
-				lcd_str("ALARM!!");
+				thresh_val = atoi(eeprom_read_str()); 		// Reading from eeprom, convert to integer
+				uart_tx_int(thresh_val);
+				uart_tx_str("\r\n");
+	
+				adc_val = adc_read();
+				cmd(0x8A);
+				lcd_int(adc_val);
+	
+				if(adc_val > thresh_val)
+				{
+					cmd(0x80);
+					lcd_str("ALARM!!");
+				}
+				else
+				{
+					cmd(0x80);
+					lcd_str(". . . .");
+				}
+	
+				delay(100);
 			}
-			else
-			{
-				cmd(0x80);
-				lcd_str(". . . .");
-			}
-
-			delay(100);
 	}
 }
 
