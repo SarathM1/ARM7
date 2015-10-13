@@ -1,14 +1,9 @@
-#include<lpc213x.h>
-#include "lcd.h"
-#include "uart0_inter.h"
+//#include<lpc213x.h>
+//#include "lcd.h"
+//#include "uart0_inter.h"
 
-unsigned char i,j;
+unsigned char i;
 
-void uart(void)__irq // ISR for UART0
-{
-	uart_tx_char(U0RBR);
-	VICVectAddr = 0;
-}
 void start(void)
 {
 	 I2C0CONSET=0x64;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
@@ -54,6 +49,14 @@ char readdata(void)
 	return I2C0DAT; 
 }
 
+void writedata(char ch)
+{
+	I2C0DAT=ch;
+	I2C0CONSET=0X04;
+	I2C0CONCLR=0X08;
+	while(I2C0STAT != 0X28);
+}
+
 void i2c_init()
 {
 	PINSEL0 |= 0X00000050;
@@ -66,11 +69,13 @@ void i2c_init()
 
 
 
-void eeprom_read()
+char* eeprom_read_str()
 {
+	int j;
+	char* val;
 	/***********************WRITING DATA*************************************/
 	start();
-	uart_tx_str("\r\nhere\r\n");
+	//uart_tx_str("\r\nhere\r\n");
 	devadd1();
 	location(0x00);
 	stop();
@@ -80,22 +85,25 @@ void eeprom_read()
 	devadd2();
 	for(j=0;j<=5;j++)
 	{
-		uart_tx_char(readdata());
+		val[j] = readdata();
 	}
 
 	stop();
+	return val;
 }
 
-
-int main()
+void eeprom_write_str(char* str)
 {
-	i2c_init();
-	uart_init();
-	while(1)
+	int k;
+	start();
+	devadd1();
+	location(0x00);
+	for(k=0;str[k]!='\0';k++)	   //array[i]!='\0';
 	{
-		   	uart_tx_str("\r\nReading from eeprom\r\n");
-			eeprom_read();
-			uart_tx_str("\r\nDONE!!\r\n");
+		writedata(str[k]);
 	}
+	stop();
+	delay(2);		  // delay 2 ms. I2c won't work if removed
 }
+
 
