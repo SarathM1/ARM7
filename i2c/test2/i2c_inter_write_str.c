@@ -58,8 +58,7 @@ void i2c_init()
 	//MEMMAP = 0x2;				/* Remap interrupt vectors to SRAM */
 	PINSEL0 = 0x50;				/* Initialize Pin Connect Block */
 	I2C0CONCLR = 0XFF; 			/* clearing all flags */
-	//I2C0CONSET = 0x40; 		// Change here 
-	I2C0CONSET = 0X44;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
+	I2C0CONSET = (1<<I2EN); 	/* Enable i2c */ 
 	I2C0SCLH = 0x96; 			/* 100 KHz */
 	I2C0SCLL = 0x96;
 	
@@ -73,7 +72,7 @@ void i2c_init()
 int main()
 {
 	i2c_init();
-	I2C0CONSET=0x64; 			/* Send start bit */
+	I2C0CONSET = (1 << STA); 			/* Send start bit */
 	while(1);
 }
 
