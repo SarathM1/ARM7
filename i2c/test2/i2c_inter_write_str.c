@@ -22,7 +22,7 @@ void I2C_ISR(void)__irq
 	{
 		case 8:					/* Start condition transmitted */
 			I2C0DAT = SLAV_ADDR; /* Slave address + write */
-			I2C0CONCLR=0x28; 	/* Clear SI and Start flag */
+			I2C0CONCLR = (1<<SIC) | (1<<STAC); 	/* Clear SI and Start flag */
 			break;
 		
 		case 24: 				/* Acknowledgement received from slave for slave address */
