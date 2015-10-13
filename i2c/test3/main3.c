@@ -3,14 +3,10 @@
 #include "lcd.h"
 #include "uart0_inter.h"
 
-unsigned char i;
 char  val[5];	
+//int flag = 1;
 
-void uart(void)__irq // ISR for UART0
-{
-	uart_tx_char(U0RBR);
-	VICVectAddr = 0;
-}
+
 void start(void)
 {
 	 I2C0CONSET=0x64;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
@@ -119,13 +115,44 @@ char* eeprom_read_str()
 	return val;
 }
 
+void uart(void)__irq // ISR for UART0
+{
+	char ch;
+	char threshold[5];
+	static int i;
+
+	ch = U0RBR;	
+
+	if(ch == '*')
+	{
+		i = 0;
+		//flag = 0;
+	}
+	else if(ch == '#')
+	{
+		threshold[i] = '\0';
+		eeprom_write_str(threshold);
+		debug_str("Written to eeprom!!");
+		delay(500);
+		cmd(0x01);
+		//flag = 1;	
+	}
+	else
+	{
+		threshold[i] = ch;
+		i++;
+	}
+	
+	VICVectAddr = 0;
+}
 
 int main()
 {
 	int thresh_val;
 	i2c_init();
 	uart_init();
-	eeprom_write_str("3489");
+	lcd_init();
+	
 	while(1)
 	{
 		   	uart_tx_str("\r\nReading from eeprom\r\n");
