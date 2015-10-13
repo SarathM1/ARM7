@@ -20,17 +20,17 @@ void I2C_ISR(void)__irq
 	temp=I2C0STAT;
 	switch(temp)
 	{
-		case 8:					/* Start condition transmitted */
+		case 0x08:					/* Start condition transmitted */
 			I2C0DAT = SLAV_ADDR; /* Slave address + write */
 			I2C0CONCLR = (1<<SIC) | (1<<STAC); 	/* Clear SI and Start flag */
 			break;
 		
-		case 24: 				/* Acknowledgement received from slave for slave address */
+		case 0x18: 				/* Acknowledgement received from slave for slave address */
 			I2C0DAT=0X00;  		/* Data to be transmitted */
 			I2C0CONCLR = (1<<SIC);		/* clear SI */
 			break;
 		
-		case 40:				/* Acknowledgement received from slave for byte transmitted from master. Stop
+		case 0x28:				/* Acknowledgement received from slave for byte transmitted from master. Stop
 								condition is transmitted in this state signaling the end of transmission */
 			if(data[i] != '\0' )
 			{
