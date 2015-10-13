@@ -1,66 +1,35 @@
 #include"LPC213x.h"
 
-
-/* I 2 C states */
-/* Start condition transmitted */
-
-void ISR_8()
-{
-	/* Port Indicator */
-	 //IOCLR=0x10; 
-	/* Slave address + write */
-	 I2C0DAT=0x74; 
-	/* Clear SI and Start flag */
-	 I2C0CONCLR=0x28; 
-	/* Port Indicator */
-	 //IOSET=0x10;
-}
-
-/* Acknowledgement received from slave for slave address */
-void ISR_18()
-{
-	/* Port Indicator */
-	//IOCLR=0x20; 
-	/* Data to be transmitted */
-	I2C0DAT=0x55;  
-	/* clear SI */
-	I2C0CONCLR=0x8;
-	/* Port Indicator */
-	//IOSET=0x20;
-}
-
-/* Acknowledgement received from slave for byte transmitted from master. Stop
-condition is transmitted in this state signaling the end of transmission */
-void ISR_28()
-{
-	/* Port Indicator */
-	 //IOCLR=0x80;
-	/* Transmit stop condition */
-	 I2C0CONSET=0x10; 
-	/* clear SI */
-	 I2C0CONCLR=0x8;  
-	/* Port Indicator */
-	 //IOSET=0x80;
-}
-
-/********************** I 2 C ISR **************************/
 //__irq void I2C_ISR()
 void I2C_ISR(void)__irq
 {
+	static int flag = 1;
 	int temp=0;
 	temp=I2C0STAT;
 	switch(temp)
 	{
-		case 8:
-			ISR_8();
+		case 8:					/* Start condition transmitted */
+			I2C0DAT=0XA0;  		/* Slave address + write */
+			I2C0CONCLR=0x28; 	/* Clear SI and Start flag */
 			break;
 		
-		case 24:
-			ISR_18();
+		case 24: 				/* Acknowledgement received from slave for slave address */
+			I2C0DAT=0X00;  		/* Data to be transmitted */
+			I2C0CONCLR=0x8;		/* clear SI */
 			break;
 		
-		case 40:
-			ISR_28();
+		case 40:				/* Acknowledgement received from slave for byte transmitted from master. Stop
+								condition is transmitted in this state signaling the end of transmission */
+			if(flag)
+			{
+				I2C0DAT='A';
+				flag = 0;
+			}
+			else
+			{
+				I2C0CONSET=0x10; 	/* Transmit stop condition */
+			}
+			I2C0CONCLR=0x8;  	/* clear SI */
 			break;
 		
 		default :
@@ -85,19 +54,14 @@ void i2c_init()
 	/* Initialize VIC for I 2 C use */
 	VICIntSelect = 0x0; 				/* selecting IRQ */
 	VICIntEnable = 0x200;  				/* enabling I 2 C */
-	VICVectCntl0 = 0x29; 				/* highest priority and enabled */
+	VICVectCntl0 = (1<<5) | (0x09); 	/* highest priority and enabled, int_request(4:0) = 0x09, IRQslot_en1(5) = 1 */
 	VICVectAddr0 = (unsigned) I2C_ISR;	/* ISR address written to the respective address register*/
 }
 
 int main()
 {
-	/* Initialize system */
 	i2c_init();
-	
-	/* Send start bit */
-	I2C0CONSET=0x60; 
-	
-	/* Do forever */
+	I2C0CONSET=0x64; 			/* Send start bit */
 	while(1);
 }
 
