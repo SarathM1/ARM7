@@ -27,7 +27,7 @@ void I2C_ISR(void)__irq
 		
 		case 24: 				/* Acknowledgement received from slave for slave address */
 			I2C0DAT=0X00;  		/* Data to be transmitted */
-			I2C0CONCLR=0x8;		/* clear SI */
+			I2C0CONCLR = (1<<SIC);		/* clear SI */
 			break;
 		
 		case 40:				/* Acknowledgement received from slave for byte transmitted from master. Stop
@@ -39,9 +39,9 @@ void I2C_ISR(void)__irq
 			}
 			else
 			{
-				I2C0CONSET=0x10; 	/* Transmit stop condition */
+				I2C0CONSET = (1<<STO); 	/* Transmit stop condition */
 			}
-			I2C0CONCLR=0x8;  	/* clear SI */
+			I2C0CONCLR = (1<<SIC);  	/* clear SI */
 			break;
 		
 		default :
