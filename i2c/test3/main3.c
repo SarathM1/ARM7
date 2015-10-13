@@ -1,8 +1,10 @@
 #include<lpc213x.h>
+#include<stdlib.h>
 #include "lcd.h"
 #include "uart0_inter.h"
 
 unsigned char i;
+char  val[5];	
 
 void uart(void)__irq // ISR for UART0
 {
@@ -91,30 +93,8 @@ void i2c_init()
 	
 }
 
-void eeprom_read_str()
-{
-//	char* str;
-	int j;
-	/***********************WRITING DATA*************************************/
-	start();
-	uart_tx_str("\r\nhere\r\n");
-	devadd1();
-	location(0x00);
-	stop();
-	
-	/******************************************READ********************************************/
-	start();
-	devadd2();
-	for(j=0;j<4;j++)
-	{
-		uart_tx_char(readdata());
-	}
 
-	stop();
-}
-
-
-void eeprom_read()
+char* eeprom_read_str()
 {
 	int j;
 	char ch;
@@ -131,24 +111,26 @@ void eeprom_read()
 	for(j=0;j<4;j++)
 	{
 		ch = readdata();
-		uart_tx_char(ch);
+		val[j] = ch;
 		if(ch == '\0')
 			break;
 	}
-
 	stop();
+	return val;
 }
 
 
 int main()
 {
+	int thresh_val;
 	i2c_init();
 	uart_init();
 	eeprom_write_str("3489");
 	while(1)
 	{
 		   	uart_tx_str("\r\nReading from eeprom\r\n");
-			eeprom_read();
+			thresh_val = atoi(eeprom_read_str());
+			uart_tx_int(thresh_val);
 			uart_tx_str("\r\nDONE!!\r\n");
 			delay(500);
 	}
