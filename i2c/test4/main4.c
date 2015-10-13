@@ -71,6 +71,7 @@ void eeprom_read()
 {
 	/***********************WRITING DATA*************************************/
 	start();
+	uart_tx_str("\r\nhere\r\n");
 	devadd1();
 	location(0x00);
 	stop();
@@ -78,10 +79,14 @@ void eeprom_read()
 	/******************************************READ********************************************/
 	start();
 	devadd2();
-	for(j=0;j<=64;j++)
+	for(j=0;j<=15;j++)
 	{
 		uart_tx_char(readdata());
 	}
+//	for(j=17;j<=64;j++)
+//	{
+//		readdata();
+//	}
 	stop();
 }
 
@@ -92,7 +97,10 @@ int main()
 	uart_init();
 	while(1)
 	{
-	
+		   	I2C0CONCLR=0XFF;
+			I2C0CONSET=0X44;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
+			
+			delay(500);
 			uart_tx_str("\r\nReading from eeprom\r\n");
 			eeprom_read();
 			uart_tx_str("\r\nDONE!!\r\n");
