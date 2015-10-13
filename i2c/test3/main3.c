@@ -5,7 +5,6 @@
 #include "adc.h"
 
 char  val[5];	
-//int flag = 1;
 
 
 void start(void)
@@ -67,7 +66,7 @@ void eeprom_write_str(char* str)
 {
 	int k;
 	start();
-	uart_tx_char('?');
+	uart_tx_str("\r\nUPDATING THRESHOLD VALUE!!");
 	devadd1();
 	location(0x00);
 	for(k=0;str[k]!='\0';k++)	   //array[i]!='\0';
