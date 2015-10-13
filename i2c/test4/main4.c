@@ -11,7 +11,7 @@ void uart(void)__irq // ISR for UART0
 }
 void start(void)
 {
-	 I2C0CONSET=0x24;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
+	 I2C0CONSET=0x64;	  //SEND START BIT(STA) & ACKNOWEDGE FLAG SET
 	 I2C0CONCLR=0x08;
 	 while(I2C0STAT!=0X08);
 }
@@ -43,7 +43,7 @@ void location(int add)
 void stop(void)
 { 
 	I2C0CONSET=0X14;		  	//SEND STOP BIT(STO) & ACKNOWEDGE FLAG SET
-	I2C0CONCLR=0X08;
+	I2C0CONCLR=0X48;
 }
 
 char readdata(void)
@@ -79,14 +79,11 @@ void eeprom_read()
 	/******************************************READ********************************************/
 	start();
 	devadd2();
-	for(j=0;j<=15;j++)
+	for(j=0;j<=5;j++)
 	{
 		uart_tx_char(readdata());
 	}
-//	for(j=17;j<=64;j++)
-//	{
-//		readdata();
-//	}
+
 	stop();
 }
 
@@ -97,14 +94,14 @@ int main()
 	uart_init();
 	while(1)
 	{
-		   	I2C0CONCLR=0XFF;
-			I2C0CONSET=0X44;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
+		   	//I2C0CONCLR=0X40;
+			//I2C0CONSET=0X40;		   // ENABLE THE I2C BY SETTING I2EN BIT & ACKNOWEDGE FLAG SET  
 			
-			delay(500);
+			//delay(500);
 			uart_tx_str("\r\nReading from eeprom\r\n");
 			eeprom_read();
 			uart_tx_str("\r\nDONE!!\r\n");
-			delay(500);	
+			//delay(500);	
 	}
 }
 
