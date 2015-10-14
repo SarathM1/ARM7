@@ -391,14 +391,9 @@
               <FilePath>.\Startup.s</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>i2c_inter_write_str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\i2c\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\i2c\i2c.c</FilePath>
+              <FilePath>.\i2c\test2\i2c_inter_write_str.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -438,6 +433,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>i2c_read_char_inter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\i2c\test2\i2c_read_char_inter.c</FilePath>
             </File>
           </Files>
         </Group>
