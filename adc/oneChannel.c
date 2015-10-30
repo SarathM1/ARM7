@@ -28,7 +28,7 @@
 		val = (AD0DR & 0x0000FFC0) >> 6;
 		  
 		//val = 1234;
-		lcd_char(val);
+		lcd_int(val);
 		delay(1000);		
 
 	}
